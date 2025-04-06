@@ -1,5 +1,7 @@
 # run some command for project execution
-1) npm install --f  and 2) npm run dev
+1) npm install --f
+2) npm run dev
+3) and enjoy!!
                      
 # 💻 CodeCollab – Real-Time Developer Collaboration Platform
 

@@ -12,20 +12,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, Menu, Search, X } from "lucide-react"
+import { Bell, Menu, MessageSquare, Search, X } from "lucide-react"
 import { useState } from "react"
 import { Sheet, SheetContent } from "@/components/ui/sheet"
 import DashboardSidebar from "./sidebar"
+import { useSession } from "next-auth/react"
 
-export default function DashboardHeader() {
+interface DashboardHeaderProps {
+  onToggleMessages?: () => void
+  onToggleSidebar?: () => void
+}
+
+export default function DashboardHeader({ onToggleMessages, onToggleSidebar }: DashboardHeaderProps) {
+  const { data: session } = useSession()
   const [showMobileSearch, setShowMobileSearch] = useState(false)
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="flex items-center md:hidden">
-          <Button variant="ghost" size="icon" onClick={() => setShowMobileSidebar(true)}>
+      <div className="flex h-14 items-center px-4">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={onToggleSidebar} className="hidden md:flex">
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Toggle sidebar</span>
+          </Button>
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setShowMobileSidebar(true)}>
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </Button>
@@ -34,9 +45,7 @@ export default function DashboardHeader() {
               <DashboardSidebar isMobile />
             </SheetContent>
           </Sheet>
-        </div>
 
-        <div className="mr-4 hidden md:flex">
           <Link href="/" className="flex items-center space-x-2">
             <div className="relative h-6 w-6">
               <svg
@@ -85,6 +94,10 @@ export default function DashboardHeader() {
                 <Search className="h-5 w-5" />
                 <span className="sr-only">Search</span>
               </Button>
+              <Button variant="ghost" size="icon" onClick={onToggleMessages}>
+                <MessageSquare className="h-5 w-5" />
+                <span className="sr-only">Messages</span>
+              </Button>
               <Button variant="ghost" size="icon">
                 <Bell className="h-5 w-5" />
                 <span className="sr-only">Notifications</span>
@@ -93,8 +106,10 @@ export default function DashboardHeader() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="/placeholder.svg?height=32&width=32" alt="@user" />
-                      <AvatarFallback>JD</AvatarFallback>
+                      <AvatarImage src={session?.user?.image || undefined} alt={session?.user?.name || "@user"} />
+                      <AvatarFallback>
+                        {session?.user?.name?.charAt(0).toUpperCase() || "U"}
+                      </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

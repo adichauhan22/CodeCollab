@@ -65,25 +65,14 @@ export default function NewProjectPage() {
         description: "Your new project has been created successfully.",
       })
 
-      router.push(`/dashboard/projects/${project.id}`)
+      router.replace("/dashboard/projects")
     } catch (error) {
       console.error("Error creating project:", error)
-
-      // Create a mock project for demo purposes
-      const mockProject = {
-        id: Math.random().toString(36).substring(2, 9),
-        name: formData.name,
-        description: formData.description,
-        language: formData.language,
-        shareCode: generateMockShareCode(),
-      }
-
       toast({
-        title: "Project Created (Demo)",
-        description: "Your new project has been created successfully in demo mode.",
+        title: "Error",
+        description: "Failed to create project. Please try again.",
+        variant: "destructive",
       })
-
-      router.push(`/dashboard/projects/${mockProject.id}`)
     } finally {
       setIsLoading(false)
     }

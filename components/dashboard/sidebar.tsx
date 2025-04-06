@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Home, FolderGit2, Users, MessageSquare, Settings, HelpCircle, PlusCircle } from "lucide-react"
+import { Home, FolderGit2, Users, Settings, HelpCircle, PlusCircle } from "lucide-react"
 
 interface SidebarProps {
   isMobile?: boolean
@@ -32,12 +32,6 @@ export default function DashboardSidebar({ isMobile }: SidebarProps) {
       icon: Users,
       href: "/dashboard/team",
       active: pathname === "/dashboard/team",
-    },
-    {
-      label: "Messages",
-      icon: MessageSquare,
-      href: "/dashboard/messages",
-      active: pathname === "/dashboard/messages",
     },
     {
       label: "Settings",

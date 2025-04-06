@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
-import { findProjectsByOwnerId, findProjectsByCollaborator, insertOne, getDb } from "@/lib/db"
+import { findProjectsByOwnerId, findProjectsByCollaborator, insertOne, getDb, findById } from "@/lib/db"
 import { COLLECTIONS } from "@/lib/models"
 import { generateShareCode } from "@/lib/utils"
 import { nanoid } from "nanoid"
@@ -42,20 +42,22 @@ export async function POST(req: NextRequest) {
     // Generate a unique share code
     const shareCode = nanoid(8)
 
-    const project = await insertOne(COLLECTIONS.PROJECTS, {
+    const result = await insertOne(COLLECTIONS.PROJECTS, {
       name,
       description,
       language,
       shareCode,
-      ownerId: session.user.id,
+      ownerId: new ObjectId(session.user.id),
       createdAt: new Date(),
       updatedAt: new Date(),
     })
 
     // Create default files based on language
-    const defaultFiles = getDefaultFiles(language, project._id.toString())
+    const defaultFiles = getDefaultFiles(language, result.insertedId.toString())
     await Promise.all(defaultFiles.map(file => insertOne(COLLECTIONS.FILES, file)))
 
+    // Fetch the created project to return complete data
+    const project = await findById(COLLECTIONS.PROJECTS, result.insertedId.toString())
     return NextResponse.json(project, { status: 201 })
   } catch (error) {
     console.error("Error creating project:", error)

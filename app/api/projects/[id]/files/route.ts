@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
-import { getDb } from "@/lib/db"
+import { getDb, hasProjectAccess, insertOne } from "@/lib/db"
 import { COLLECTIONS } from "@/lib/models"
+import { CODE_SNIPPETS } from "@/components/editor/CodeEditor"
 
 // Get all files for a project
 export async function GET(
@@ -20,16 +21,16 @@ export async function GET(
 
     // Get all files for the project
     const files = await db.collection(COLLECTIONS.FILES)
-      .find({ projectId: params.id })
+      .find({ projectId: new ObjectId(params.id) })
       .toArray()
 
     return NextResponse.json(
       files.map((file) => ({
         id: file._id.toString(),
         name: file.name,
-        path: file.path,
         content: file.content || "",
-        projectId: file.projectId,
+        language: file.language || "javascript",
+        projectId: file.projectId.toString(),
         createdAt: file.createdAt,
         updatedAt: file.updatedAt,
       }))
@@ -42,62 +43,46 @@ export async function GET(
 
 // Create a new file
 export async function POST(
-  request: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { name, path, content } = await request.json()
-
-    if (!name) {
-      return NextResponse.json({ error: "File name is required" }, { status: 400 })
+    const hasAccess = await hasProjectAccess(params.id, session.user.id)
+    if (!hasAccess) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    // Validate file name
-    const fileNameRegex = /^[a-zA-Z0-9._-]+$/
-    if (!fileNameRegex.test(name)) {
-      return NextResponse.json({ 
-        error: "File name can only contain letters, numbers, periods, dashes, and underscores" 
-      }, { status: 400 })
-    }
-
-    const db = await getDb()
-
-    // Check if file with same name already exists
-    const existingFile = await db.collection(COLLECTIONS.FILES).findOne({ 
-      projectId: params.id,
-      name: name 
-    })
-
-    if (existingFile) {
-      return NextResponse.json({ error: "A file with this name already exists" }, { status: 400 })
-    }
-
-    const file = await db.collection(COLLECTIONS.FILES).insertOne({
+    const { name, language } = await req.json()
+    
+    const file = await insertOne(COLLECTIONS.FILES, {
       name,
-      path: path || "/",
-      content: content || "",
-      projectId: params.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      language: language || "javascript",
+      content: CODE_SNIPPETS[language] || "",
+      projectId: new ObjectId(params.id),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
 
     return NextResponse.json({
       id: file.insertedId.toString(),
       name,
-      path: path || "/",
-      content: content || "",
+      language: language || "javascript",
+      content: CODE_SNIPPETS[language] || "",
       projectId: params.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     })
   } catch (error) {
     console.error("Error creating file:", error)
-    return NextResponse.json({ error: "Failed to create file" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to create file" },
+      { status: 500 }
+    )
   }
 }
 

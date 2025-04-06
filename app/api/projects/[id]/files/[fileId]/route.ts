@@ -4,6 +4,8 @@ import { authOptions } from "@/lib/auth"
 import { ObjectId } from "mongodb"
 import { getDb } from "@/lib/db"
 import { COLLECTIONS } from "@/lib/models"
+import { NextRequest } from "next/server"
+import { updateOne, hasProjectAccess } from "@/lib/db"
 
 // Get a specific file
 export async function GET(
@@ -46,57 +48,47 @@ export async function GET(
 
 // Update a file
 export async function PUT(
-  request: Request,
-  context: { params: { id: string; fileId: string } }
+  req: NextRequest,
+  { params }: { params: { id: string; fileId: string } }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const { content, name, path } = await request.json()
-    const { id, fileId } = context.params
-
-    if (!content) {
-      return NextResponse.json({ error: "Content is required" }, { status: 400 })
+    const hasAccess = await hasProjectAccess(params.id, session.user.id)
+    if (!hasAccess) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const db = await getDb()
+    const { content, language } = await req.json()
 
-    // Update the file
-    const result = await db.collection(COLLECTIONS.FILES).findOneAndUpdate(
-      {
-        _id: new ObjectId(fileId),
-        projectId: id
-      },
-      {
-        $set: {
-          content,
-          name: name || undefined,
-          path: path || undefined,
-          updatedAt: new Date().toISOString()
-        }
-      },
-      { returnDocument: "after" }
-    )
+    const updatedFile = await updateOne(COLLECTIONS.FILES, params.fileId, {
+      content,
+      language,
+      updatedAt: new Date(),
+    })
 
-    if (!result) {
+    if (!updatedFile) {
       return NextResponse.json({ error: "File not found" }, { status: 404 })
     }
 
     return NextResponse.json({
-      id: result._id.toString(),
-      name: result.name,
-      path: result.path,
-      content: result.content,
-      projectId: result.projectId,
-      createdAt: result.createdAt,
-      updatedAt: result.updatedAt,
+      id: updatedFile._id.toString(),
+      name: updatedFile.name,
+      content: updatedFile.content,
+      language: updatedFile.language,
+      projectId: updatedFile.projectId.toString(),
+      createdAt: updatedFile.createdAt,
+      updatedAt: updatedFile.updatedAt,
     })
   } catch (error) {
     console.error("Error updating file:", error)
-    return NextResponse.json({ error: "Failed to update file" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to update file" },
+      { status: 500 }
+    )
   }
 }
 

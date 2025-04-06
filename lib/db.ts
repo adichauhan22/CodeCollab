@@ -117,10 +117,12 @@ export async function findProjectById(id: string) {
 
 export async function findProjectsByOwnerId(ownerId: string) {
   const db = await getDb()
+  // Check if ownerId is already an ObjectId instance
+  const ownerObjectId = typeof ownerId === 'string' ? new ObjectId(ownerId) : ownerId
   return db
     .collection(COLLECTIONS.PROJECTS)
     .find({
-      ownerId: new ObjectId(ownerId),
+      ownerId: ownerObjectId,
     })
     .toArray()
 }

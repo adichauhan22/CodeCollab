@@ -95,6 +95,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
       content,
       projectId: new ObjectId(projectId),
       userId: new ObjectId(userId),
+      userName: session.user.name,
+      userImage: session.user.image,
+      createdAt: new Date(),
     })
 
     return NextResponse.json({

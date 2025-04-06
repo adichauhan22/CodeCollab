@@ -5,11 +5,14 @@ import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import DashboardSidebar from "@/components/dashboard/sidebar"
 import DashboardHeader from "@/components/dashboard/header"
+import { MessagesSidebar } from "@/components/chat/MessagesSidebar"
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
+  const [showMessages, setShowMessages] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(true)
 
   useEffect(() => {
     setMounted(true)
@@ -45,10 +48,36 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <DashboardHeader />
-      <div className="flex flex-1">
-        <DashboardSidebar />
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+      <DashboardHeader 
+        onToggleMessages={() => setShowMessages(!showMessages)} 
+        onToggleSidebar={() => setShowSidebar(!showSidebar)}
+      />
+      <div className="flex flex-1 overflow-hidden">
+        <div
+          className={`w-[280px] min-w-[280px] border-r transition-all duration-300 ${
+            showSidebar ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <div className="h-full overflow-y-auto">
+            <DashboardSidebar />
+          </div>
+        </div>
+        <main 
+          className={`flex-1 transition-all duration-300 ${
+            !showSidebar && !showMessages ? "w-full" : ""
+          }`}
+        >
+          {children}
+        </main>
+        <div
+          className={`w-[320px] min-w-[320px] border-l transition-all duration-300 ${
+            showMessages ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="h-full overflow-y-auto">
+            <MessagesSidebar />
+          </div>
+        </div>
       </div>
     </div>
   )

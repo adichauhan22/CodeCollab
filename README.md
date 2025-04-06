@@ -1,11 +1,30 @@
 # 💻 CodeCollab – Real-Time Developer Collaboration Platform
 
 *CodeCollab* is a real-time developer collaboration tool built as a *web application* (and later as a *VS Code extension*), enabling seamless live code editing, AI-powered suggestions, and smart pair programming matchmaking.
+
+# LANDING PAGE
 ![Screenshot 2025-04-07 000113](https://github.com/user-attachments/assets/bcaf4cce-a5c9-4f86-a890-7e41f1305270)
+
+---
+# DASHBOARD PAGE
 ![Screenshot 2025-04-07 000226](https://github.com/user-attachments/assets/dd1aed67-60bd-4457-8ccc-42ee1f1cd4ba)
+
+---
+# PROJECT CREATION PAGE
 ![Screenshot 2025-04-07 000253](https://github.com/user-attachments/assets/fddecdd3-ea22-4a31-a9c4-11693518302a)
+
+---
+# CODE EDITOR PAGE
+![image](https://github.com/user-attachments/assets/04b937f5-72b0-46ec-9596-0a8517721c4e)
+
+---
+# TEAM INVITATION
 ![Screenshot 2025-04-07 001013](https://github.com/user-attachments/assets/2013a013-dab5-4cf1-9fed-858199341e63)
-  
+
+---
+# SETTING CHANGES PAGE
+![image](https://github.com/user-attachments/assets/4d61e3d2-6005-41ac-a0af-ac04923b35dc)
+
 ---
 
 ## 🚀 Features

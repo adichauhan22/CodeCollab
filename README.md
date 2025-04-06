@@ -1,3 +1,5 @@
+# run some command for project execution --  1) npm install --f  and 2) npm run dev
+                     
 # 💻 CodeCollab – Real-Time Developer Collaboration Platform
 
 *CodeCollab* is a real-time developer collaboration tool built as a *web application* (and later as a *VS Code extension*), enabling seamless live code editing, AI-powered suggestions, and smart pair programming matchmaking.

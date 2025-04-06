@@ -8,9 +8,9 @@
 
 - 🔄 *Real-Time Code Editing* – Collaborate live using Socket.io and Monaco Editor  
 - 💬 *Live Chat* – Communicate without leaving the code  
-- 🤖 *AI Code Assistance* – Autocomplete & smart suggestions via OpenAI Codex / CodeBERT  
+- 🤖 *AI Code Assistance* – Autocomplete & smart suggestions via GeminiAI
 - 🧠 *Smart Matchmaking* – ML-based pairing based on skills, experience & preferences  
-- 🧩 *Interactive Workspace* – Smooth, responsive UI built with React.js  
+- 🧩 *Interactive Workspace* – Smooth, responsive UI built with Next.js  
 
 ---
 

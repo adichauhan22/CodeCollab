@@ -18,17 +18,19 @@
 
 | Layer       | Technology                      |
 |------------|----------------------------------|
-| Frontend   | Next.js, Monaco Editor |
+| Frontend   | React.js / Next.js, Monaco Editor |
 | Backend    | Node.js, Express.js               |
 | Database   | MongoDB / PostgreSQL              |
 | Real-Time  | Socket.io                         |
-| AI Engine  | Gemini AI           |
+| AI Engine  | GeminiAI           |
 | ML Engine  | Python (scikit-learn / TensorFlow)|
 | Deployment | Vercel (Frontend), Render / AWS (Backend) |
 
 ---
 
 ## 📂 Project Structure
+
+
 CodeCollab/
 ├── app/             # Next.js App directory (routes, layout)
 ├── components/      # Reusable UI components (Editor, Chat, Sidebar)
@@ -39,10 +41,24 @@ CodeCollab/
 └── README.md
 
 
-🧭 Development Approach
-Planned features & UI using Figma
-Built backend with Express & real-time features via Socket.io
-Developed React frontend with Monaco Editor
-Integrated GeminiAI for AI-powered coding help
-Implemented ML-based matchmaking system in Python
-Tested performance & deployed using Vercel + Render
+---
+
+## 🧭 Development Approach
+
+1. Planned features & UI using Figma  
+2. Built backend with Express & real-time features via Socket.io  
+3. Developed React frontend with Monaco Editor  
+4. Integrated GeminiAI for AI-powered coding help  
+5. Implemented ML-based matchmaking system in Python  
+6. Tested performance & deployed using Vercel + Render  
+
+---
+
+## 📌 Future Enhancements
+
+- [ ] VS Code Extension support  
+- [ ] Git integration & version control  
+- [ ] Voice/video chat for real-time collaboration  
+- [ ] Plugin system for extensions (linters, formatters, etc.)
+
+---

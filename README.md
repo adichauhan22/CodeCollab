@@ -22,6 +22,15 @@
 ![Screenshot 2025-04-07 001013](https://github.com/user-attachments/assets/2013a013-dab5-4cf1-9fed-858199341e63)
 
 ---
+# RECEIVE INVITATION VIA EMAIL
+![image](https://github.com/user-attachments/assets/48774592-426b-4857-bc1f-65723ee3532a)
+
+---
+# ACCEPT INVITATION,then Signup/Login and Finally! do code together!
+![image](https://github.com/user-attachments/assets/98d557c0-e2c5-43fb-b85a-2f252039c6e3)
+![image](https://github.com/user-attachments/assets/abde2e29-a0a6-474c-bf6f-f15872446377)
+
+---
 # SETTING CHANGES PAGE
 ![image](https://github.com/user-attachments/assets/4d61e3d2-6005-41ac-a0af-ac04923b35dc)
 
